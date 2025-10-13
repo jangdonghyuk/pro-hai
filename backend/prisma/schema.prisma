@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String?  @unique
+  password        String?
+  name            String
+  provider        String   @default("email")
+  providerId      String?
+  activeSessionId String?  // 현재 활성 세션 ID
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("users")
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  // 사용자 정보
+  userId      String?  // 로그인한 사용자 ID (비로그인 시 null)
+  userName    String?  // 로그인한 사용자 이름 (비로그인 시 null)
+  isLoggedIn  Boolean  @default(false)
+  
+  // 이벤트 정보
+  eventName   String   // "홈페이지 진입", "로그인 버튼 클릭" 등
+  eventType   String   // "page_view", "button_click", "form_submit" 등
+  
+  // 위치/네트워크 정보
+  ipAddress   String
+  userAgent   String?
+  referrer    String?
+  
+  // 페이지 정보
+  pageUrl     String
+  pagePath    String   // "/dashboard", "/login" 등
+  
+  // 세션 정보
+  sessionId   String?
+  
+  // 추가 메타데이터 (JSON)
+  metadata    String?  // JSON 문자열로 저장
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  
+  @@map("activity_logs")
+}

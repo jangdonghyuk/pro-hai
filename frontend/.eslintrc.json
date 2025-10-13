@@ -1,0 +1,10 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "eslint-disable-next-line no-console": "none",
+    "no-unused-vars": "warn",
+    "@next/next/no-img-element": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "no-console": "warn"
+  }
+}
