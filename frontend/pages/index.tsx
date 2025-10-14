@@ -47,29 +47,8 @@ export default function Home() {
         <meta property="og:url" content="https://pro-hai.com" />
         <meta property="og:type" content="website" />
 
-        {/* 네이버 관련 - 나중에 채우기 */}
-        <meta
-          name="naver-site-verification"
-          content="나중에_네이버_웹마스터_도구_인증코드_입력"
-        />
-
-        {/* 구글 관련 - 나중에 채우기 */}
-        <meta
-          name="google-site-verification"
-          content="나중에_구글_서치_콘솔_인증코드_입력"
-        />
-
         {/* 캐노니컬 URL */}
         <link rel="canonical" href="https://pro-hai.com" />
-        {/* 파비콘 추가 */}
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </Head>
 
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
