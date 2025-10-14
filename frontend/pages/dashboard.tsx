@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useApiWithAuth } from "@/utils/api";
 import { useActivityLog } from "../hooks/useActivityLog";
+import { PUBLIC_API_URL } from "@/utils/const";
 
 interface HealthCheckResponse {
   status: string;
@@ -56,14 +57,11 @@ export default function Dashboard() {
         throw new Error("인증 토큰이 없습니다.");
       }
 
-      const response = await authenticatedFetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/health`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await authenticatedFetch(`${PUBLIC_API_URL}/health`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response) {
         // authenticatedFetch에서 null 반환 시 (401 에러 처리됨)

@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+import { PUBLIC_API_URL } from "@/utils/const";
 
 interface ActivityLogData {
   eventName: string;
@@ -34,7 +35,7 @@ export const useActivityLog = () => {
           metadata: data.metadata,
         };
 
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/activity-log`, {
+        await fetch(`${PUBLIC_API_URL}/activity-log`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

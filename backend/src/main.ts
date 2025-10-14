@@ -10,7 +10,11 @@ async function bootstrap() {
 
   // CORS 설정 추가
   app.enableCors({
-    origin: ['http://localhost:3000'], // 프론트엔드 URL
+    origin: [
+      'https://pro-hai.com',
+      'https://www.pro-hai.com',
+      'http://localhost:3000',
+    ], // 프론트엔드 URL
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

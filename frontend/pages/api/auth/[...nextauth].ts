@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import KakaoProvider from "next-auth/providers/kakao";
 import { NextAuthOptions } from "next-auth";
+import { PUBLIC_API_URL } from "@/utils/const";
 
 interface ExtendedUser {
   id: string;
@@ -26,17 +27,14 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: credentials.email,
-                password: credentials.password,
-              }),
-            }
-          );
+          const res = await fetch(`${PUBLIC_API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
 
           const data = await res.json();
 
@@ -67,22 +65,19 @@ export const authOptions: NextAuthOptions = {
       // 카카오 로그인일 때 백엔드에 사용자 정보 전송
       if (account?.provider === "kakao") {
         try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/kakao`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                id: account.providerAccountId,
-                properties: {
-                  nickname: (profile as any)?.nickname || user.name,
-                },
-                kakao_account: {
-                  email: user.email,
-                },
-              }),
-            }
-          );
+          const res = await fetch(`${PUBLIC_API_URL}/auth/kakao`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: account.providerAccountId,
+              properties: {
+                nickname: (profile as any)?.nickname || user.name,
+              },
+              kakao_account: {
+                email: user.email,
+              },
+            }),
+          });
 
           const data = await res.json();
 

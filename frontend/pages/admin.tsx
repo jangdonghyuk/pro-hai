@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useActivityLog } from "../hooks/useActivityLog";
+import { PUBLIC_API_URL } from "@/utils/const";
 
 interface ActivityLog {
   id: string;
@@ -62,7 +63,7 @@ export default function Admin() {
       if (userIdFilter) params.append("userId", userIdFilter);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/activity-log/admin/all?${params}`
+        `${PUBLIC_API_URL}/activity-log/admin/all?${params}`
       );
       return response.json();
     },
@@ -73,7 +74,7 @@ export default function Admin() {
     queryKey: ["admin-stats"],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/activity-log/admin/stats?days=7`
+        `${PUBLIC_API_URL}/activity-log/admin/stats?days=7`
       );
       return response.json();
     },
@@ -84,7 +85,7 @@ export default function Admin() {
     queryKey: ["admin-user-stats"],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/activity-log/admin/users?days=7`
+        `${PUBLIC_API_URL}/activity-log/admin/users?days=7`
       );
       return response.json();
     },
