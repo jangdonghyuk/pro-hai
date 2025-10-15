@@ -1,9 +1,12 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { CloudWatchLogger } from 'src/utils/cloudwatch-logger';
 
 @Injectable()
 export class SecurityFilterMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  constructor(private cloudWatchLogger: CloudWatchLogger) {}
+
+  async use(req: Request, res: Response, next: NextFunction) {
     const url = req.originalUrl?.toLowerCase() || '';
     const method = req.method;
     const query = req.query ? JSON.stringify(req.query).toLowerCase() : '';
@@ -403,11 +406,31 @@ export class SecurityFilterMiddleware implements NestMiddleware {
 
     // URL 패턴 체크
     if (blockedUrlPatterns.some((pattern) => pattern.test(url))) {
+      await this.cloudWatchLogger.sendLog(
+        403,
+        method,
+        url,
+        req.ip || '0.0.0.0',
+        '차단된요청',
+        req.headers['user-agent'] || 'Unknown',
+        0,
+        `보안 필터 차단 - 악성 URL 패턴 감지: ${url}`,
+      );
       return res.status(403).json({ message: 'Forbidden' });
     }
 
     // 쿼리 패턴 체크
     if (blockedQueryPatterns.some((pattern) => pattern.test(query))) {
+      await this.cloudWatchLogger.sendLog(
+        403,
+        method,
+        url,
+        req.ip || '0.0.0.0',
+        '차단된요청',
+        req.headers['user-agent'] || 'Unknown',
+        0,
+        `보안 필터 차단 - 악성 쿼리 패턴 감지: ${query}`,
+      );
       return res.status(403).json({ message: 'Forbidden' });
     }
 

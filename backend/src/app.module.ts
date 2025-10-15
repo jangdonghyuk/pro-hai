@@ -8,6 +8,7 @@ import { HealthModule } from './health/health.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { SecurityFilterMiddleware } from './middleware/security-filter.middleware';
 import { CloudWatchLogger } from './utils/cloudwatch-logger';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CloudWatchLogger } from './utils/cloudwatch-logger';
     UsersModule,
     HealthModule,
     ActivityLogModule,
+    TestModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudWatchLogger],

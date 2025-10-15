@@ -5,10 +5,14 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CloudWatchLogger } from 'src/utils/cloudwatch-logger';
 
 @Injectable()
 export class IpFilterGuard implements CanActivate {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private cloudWatchLogger: CloudWatchLogger,
+  ) {}
 
   // 차단할 IP 목록 (하드코딩 또는 환경변수에서 가져오기)
   private getBlockedIps(): string[] {
@@ -108,7 +112,7 @@ export class IpFilterGuard implements CanActivate {
     return [...defaultBlockedIps, ...envIps].filter((ip) => ip.length > 0);
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const clientIp = this.getClientIp(request);
     const blockedIps = this.getBlockedIps();
@@ -188,7 +192,19 @@ export class IpFilterGuard implements CanActivate {
     );
   }
 
-  private logBlockedAttempt(ip: string, request: any): void {
+  private async logBlockedAttempt(ip: string, request: any): Promise<void> {
+    await this.cloudWatchLogger.sendLog(
+      403,
+      request.method,
+      request.url,
+      ip,
+      '차단된IP',
+      request.headers['user-agent'] || 'Unknown',
+      0,
+      `IP 차단 - 블랙리스트 IP 접근 시도: ${ip}`,
+    );
+
+    // 기존 console.log 유지
     const timestamp = new Date().toISOString();
     console.log(`🚫 [${timestamp}] Blocked IP attempt:`);
     console.log(`   IP: ${ip}`);
