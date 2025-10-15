@@ -110,6 +110,36 @@ export class CloudWatchLogger {
     }
   }
 
+  // 이메일 없이 CloudWatch만 전송하는 메소드 추가
+  async sendLogOnly(
+    statusCode: number,
+    method: string,
+    path: string,
+    ip: string,
+    user: string,
+    userAgent: string,
+    responseTime: number,
+    customMessage: string,
+  ) {
+    const logMessage = this.formatLogMessage(
+      statusCode,
+      method,
+      path,
+      ip,
+      user,
+      userAgent,
+      responseTime,
+      customMessage,
+    );
+
+    try {
+      // CloudWatch 로그만 전송 (이메일 없음)
+      await this.sendToCloudWatch(logMessage);
+    } catch (error) {
+      console.error('로그 전송 실패:', error);
+    }
+  }
+
   private async sendToCloudWatch(logMessage: string) {
     const logStreamName = this.getLogStreamName();
     await this.ensureLogStreamExists(logStreamName);

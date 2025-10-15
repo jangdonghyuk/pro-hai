@@ -193,7 +193,7 @@ export class IpFilterGuard implements CanActivate {
   }
 
   private async logBlockedAttempt(ip: string, request: any): Promise<void> {
-    await this.cloudWatchLogger.sendLog(
+    await this.cloudWatchLogger.sendLogOnly(
       403,
       request.method,
       request.url,

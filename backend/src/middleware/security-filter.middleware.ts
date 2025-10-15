@@ -406,7 +406,7 @@ export class SecurityFilterMiddleware implements NestMiddleware {
 
     // URL 패턴 체크
     if (blockedUrlPatterns.some((pattern) => pattern.test(url))) {
-      await this.cloudWatchLogger.sendLog(
+      await this.cloudWatchLogger.sendLogOnly(
         403,
         method,
         url,
@@ -421,7 +421,7 @@ export class SecurityFilterMiddleware implements NestMiddleware {
 
     // 쿼리 패턴 체크
     if (blockedQueryPatterns.some((pattern) => pattern.test(query))) {
-      await this.cloudWatchLogger.sendLog(
+      await this.cloudWatchLogger.sendLogOnly(
         403,
         method,
         url,
