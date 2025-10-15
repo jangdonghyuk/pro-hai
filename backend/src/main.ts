@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { IpFilterGuard } from './guards/ip-filter.guard';
 import { ConfigService } from '@nestjs/config';
 import { CloudWatchLogger } from './utils/cloudwatch-logger';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,9 @@ async function bootstrap() {
 
   // CloudWatchLogger 인스턴스 가져오기
   const cloudWatchLogger = app.get(CloudWatchLogger);
+
+  // Global Exception Filter 추가
+  app.useGlobalFilters(new GlobalExceptionFilter(cloudWatchLogger));
 
   // 보안 가드들 적용 (순서 중요!)
   app.useGlobalGuards(
