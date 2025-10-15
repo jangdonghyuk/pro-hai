@@ -37,3 +37,11 @@ next-env.d.ts
 
 # pem
 pro-hai-secret.pem
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
